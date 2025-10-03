@@ -1,40 +1,13 @@
 <!DOCTYPE html>
 <html>
   <?php
-    include "../src/services/service.php";
-    include "../src/utils/creerTableau2D.php";
-    include "../src/utils/rechercheTableau2D.php";
-    include "../src/utils/creerAlphabet.php";
+    require "../src/services/service.php";
+    require "../src/classes/ChiffrePolybe.php";
+    require_once "../src/utils/creerTableau2D.php";
+    require_once "../src/utils/creerAlphabet.php";
 
+    $chiffre_courrant = new ChiffrePolybe();
     $_carre = creer_tableau(creer_variante_alphabet($_GET["clef"], constant("ALPHABET_LATIN_MAJ")), 5, 5); //TODO gérer la 26e lettre.
-
-    function chiffrer_polybe($texte_clair, $_carre) //Chaque lettre du texte clair devient les coordonnées de la lettre dans le _carre.
-    {
-      $texte_chiffre = "";
-      foreach (str_split(strtoupper($texte_clair)) as $lettre)
-      {
-        if (recherche_tableau_2D($lettre, $_carre) != false)
-        {
-          $valeur_lettre = recherche_tableau_2D($lettre, $_carre);
-          $texte_chiffre = $texte_chiffre . "$valeur_lettre ";
-        }
-      }
-      return $texte_chiffre;
-    }
-    
-    function dechiffrer_polybe($texte_chiffre, $_carre)
-    { 
-      $texte_clair = "";
-      $texte_chiffre_formate = str_replace(" ", "", $texte_chiffre);
-      
-      $liste_coordonnees = str_split($texte_chiffre_formate, 2);
-      foreach($liste_coordonnees as $coordonnees)
-      {
-        $lettre = $_carre[$coordonnees[0]-1][$coordonnees[1]-1];
-        $texte_clair = $texte_clair . $lettre;
-      }
-      return $texte_clair;
-    }
   ?>
   <head>
       <title>Carré de Polybe</title>
@@ -57,7 +30,7 @@
               }
               else
               {
-                echo dechiffrer_polybe($_GET["texte_chiffre"], $_carre);
+                echo $chiffre_courrant->dechiffrer($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
               }
             ?></textarea><br>
           </div>
@@ -69,57 +42,38 @@
 
           <div class="formItem">
             <label for="_carre">Carré</label><br>
-            <table name="_carre"> <!--TODO créer le carré dynamiquement-->
+            <table name="_carre"> 
+              <!-- Créer le visuel du carré dynamiquement-->
               <tr>
                 <th> </th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
+                <?php //Le header au dessus du carré.
+                    $longueur_tableau = count($_carre[0]); //Prend la taille de la première rangée donc pose problème si les longueurs varient. 
+                    for($colonne = 0; $colonne < $longueur_tableau; $colonne++)
+                    {
+                      echo '<th>'.($colonne+1).'</th>';
+                    }
+                ?>
               </tr>
-              <tr>
-                <th>1</th>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[0][0]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[0][1]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[0][2]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[0][3]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[0][4]?>"></td>
-              </tr>
-              <tr>
-                <th>2</th>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[1][0]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[1][1]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[1][2]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[1][3]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[1][4]?>"></td>
-              </tr>
-              <tr>
-                <th>3</th>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[2][0]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[2][1]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[2][2]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[2][3]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[2][4]?>"></td>
-              </tr>
-              <tr>
-                <th>4</th>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[3][0]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[3][1]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[3][2]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[3][3]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[3][4]?>"></td>
-              </tr>
-              <tr>
-                <th>5</th>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[4][0]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[4][1]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[4][2]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[4][3]?>"></td>
-                <td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="<?php echo $_carre[4][4]?>"></td>
-              </tr>
+
+              <?php // Le contenu du carré + des header sur les côtés.
+                $index_rangee = 0;
+                foreach($_carre as $rangee)
+                {
+                  echo '<tr>';
+                  echo '<th>'.($index_rangee+1).'</th>';
+                  $index_colone = 0;
+                  foreach($_carre as $colonne)
+                  {
+                    echo '<td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="'. $_carre[$index_rangee][$index_colone].'"></td>';
+                    $index_colone++;
+                  }
+                  echo '</tr>';
+                  $index_rangee++;
+                }
+              ?>
             </table>
           </div>
+
           <div class="formItem" style="display: inline-block">
               <input class="formInput" type="submit" name="chiffrer" value="Chiffrer">
               <input class="formInput" type="submit" name="dechiffrer" value="Déchiffrer">
@@ -133,7 +87,7 @@
               }
               else
               {
-                echo chiffrer_polybe($_GET["texte_clair"], $_carre);
+                echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
               }
              ?></textarea>
           </div>

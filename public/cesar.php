@@ -1,43 +1,17 @@
 <!DOCTYPE html>
 <html>
     <?php
-        include "../src/services/service.php";
-        include "../src/utils/modulo.php";
-
-        function chiffrer_decalage($texte_clair, $clef, $alphabet)
-        {
-            $texte_chiffre = "";
-
-            foreach(str_split($texte_clair) as $lettre)
-            {
-                $valeur_lettre = array_search($lettre, $alphabet);
-                if($valeur_lettre !== false) //Vrai si le caractere est dans l'alphabet, faux sinon (Note: 0 === null donc doit faire false car pas même type).
-                {
-                    $nouvelle_valeur_lettre =  modulo(($valeur_lettre + $clef * 2), count($alphabet));
-                    $texte_chiffre = $texte_chiffre . $alphabet[$nouvelle_valeur_lettre];
-                }
-                else //Assume que si pas dans alphabet, est ponctuation donc laisse tel quel.
-                {
-                    $texte_chiffre = $texte_chiffre . $lettre; 
-                }
-            }
-            return $texte_chiffre;
-        }
-
-        function dechiffrer_decalage($texte_chiffre, $clef, $alphabet)
-        {
-            $clef_inverse = $clef * -1; 
-            return chiffrer_decalage($texte_chiffre, $clef_inverse, $alphabet);
-        }
+        require __DIR__ . "/../src/services/service.php";
+        require __DIR__ . "/../src/classes/ChiffreDecalage.php";
+        
+        $chiffre_courrant = new ChiffreDecalage();
     ?>
     <head>
         <title>Chiffrement par décalage</title>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-
         <?php include "../src/layout/header.php"?>
-
         <div class="page">
 	        <main>
                 <h2>Chiffrement par décalage (chiffre de César)</h2>
@@ -52,7 +26,7 @@
                         }
                         else
                         {
-                            echo dechiffrer_decalage($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
+                            echo $chiffre_courrant->dechiffrer($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
                         }
                         ?></textarea><br>
                     </div>
@@ -73,7 +47,7 @@
                         }
                         else
                         {
-                            echo chiffrer_decalage($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
+                            echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
                         }
                         ?></textarea>
                     </div>
