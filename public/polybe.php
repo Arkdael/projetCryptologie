@@ -2,7 +2,7 @@
 <html>
   <?php
     require "../src/services/service.php";
-    require "../src/classes/ChiffrePolybe.php";
+    require "../src/models/ChiffrePolybe.php";
     require_once "../src/utils/creerTableau2D.php";
     require_once "../src/utils/creerAlphabet.php";
 

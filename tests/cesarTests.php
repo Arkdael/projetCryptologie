@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . "/../src/classes/ChiffreDecalage.php";
+require __DIR__ . "/../src/models/ChiffreDecalage.php";
 require __DIR__ . "/../src/services/service.php";
 
 echo test_chiffrer_general(); 

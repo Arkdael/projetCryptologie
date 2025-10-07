@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . "/../classes/IChiffre.php";
+require "IChiffre.php";
 require __DIR__ . "/../services/service.php";
 require __DIR__ . "/../utils/creerAlphabet.php";
 require __DIR__ . "/../utils/creerTableau2D.php";

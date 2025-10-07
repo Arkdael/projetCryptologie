@@ -10,7 +10,10 @@ function creer_tableau($liste_lettres, $hauteur, $longueur)
         for($colonne = 0; $colonne < $longueur; $colonne++ )
         {
             $lettre = $liste_lettres[($rangee * $longueur) + $colonne];
-            array_push($nouvelle_rangee, $lettre);
+            if($lettre != null)
+            {
+                array_push($nouvelle_rangee, $lettre);
+            }
         }
         array_push($tableau, $nouvelle_rangee);
     }
