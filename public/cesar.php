@@ -24,7 +24,7 @@
                         {
                             echo $_GET["texte_clair"];
                         }
-                        else
+                        elseif(isset($_GET["texte_chiffre"]))
                         {
                             echo $chiffre_courrant->dechiffrer($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
                         }
@@ -32,7 +32,7 @@
                     </div>
                     <div class="formItem">
                         <label for="clef">Clef</label><br>
-  			            <input class="formInput" type="number" id="clef" name="clef" value="<?php echo $_GET["clef"]?>" required></input><br>
+  			            <input class="formInput" type="number" id="clef" name="clef" value="<?php echo $_GET["clef"]??3?>" required></input><br>
                     </div>
                     <div class="formItem" style="flex-direction:row;-">
                         <input class="formInput" type="submit" name="chiffrer" value="Chiffrer">
@@ -43,11 +43,11 @@
   			            <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php 
                         if(isset($_GET["dechiffrer"]))
                         {
-                            echo $_GET["texte_chiffre"];
+                            echo $_GET["texte_chiffre"]??"";
                         }
-                        else
+                        elseif(isset($_GET["texte_clair"]))
                         {
-                            echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"));
+                            echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MIXTE"))??"";
                         }
                         ?></textarea>
                     </div>

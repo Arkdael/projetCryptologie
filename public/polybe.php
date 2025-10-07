@@ -2,12 +2,12 @@
 <html>
   <?php
     require "../src/services/service.php";
-    require "../src/classes/ChiffrePolybe.php";
+    require_once "../src/classes/ChiffrePolybe.php";
     require_once "../src/utils/creerTableau2D.php";
     require_once "../src/utils/creerAlphabet.php";
 
     $chiffre_courrant = new ChiffrePolybe();
-    $_carre = creer_tableau(creer_variante_alphabet($_GET["clef"], constant("ALPHABET_LATIN_MAJ")), 5, 5); //TODO gérer la 26e lettre.
+    $_carre = creer_tableau(creer_variante_alphabet($_GET["clef"]??"", constant("ALPHABET_LATIN_MAJ")), 5, 5); //TODO gérer la 26e lettre.
   ?>
   <head>
       <title>Carré de Polybe</title>
@@ -28,7 +28,7 @@
               {
                 echo $_GET["texte_clair"];
               }
-              else
+              elseif(isset($_GET["texte_chiffre"]))
               {
                 echo $chiffre_courrant->dechiffrer($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
               }
@@ -37,7 +37,7 @@
 
           <div class="formItem">
             <label for="clef">Clef</label><br>
-  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo $_GET["clef"]?>"/><br>
+  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo $_GET["clef"]??""?>"/><br>
           </div>
 
           <div class="formItem">
@@ -85,7 +85,7 @@
               {
                 echo $_GET["texte_chiffre"];
               }
-              else
+              elseif(isset($_GET["texte_clair"]))
               {
                 echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
               }
