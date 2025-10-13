@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . "/../src/models/ChiffrePolybe.php";
+require_once __DIR__ . "/../src/models/ChiffrePolybe.php";
 echo test_chiffrer_general();
 echo test_chiffrer_avec_clef();
 

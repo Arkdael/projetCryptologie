@@ -1,36 +1,41 @@
 <?php
-require "IChiffre.php";
-require __DIR__ . "/../utils/creerTableau2D.php";
-
+require_once "IChiffre.php";
+require_once __DIR__ . "/../utils/Alphabet.php";
+require_once __DIR__ . "/../utils/Tableau.php";
 class ChiffreUBCHI implements Ichiffre
 {
     public function chiffrer($texte_clair, $clef, $alphabet)
     {
         $texte_formate = str_replace(" ", "", $texte_clair);
-        $tableau_clair = creer_tableau(liste_lettres : $texte_formate, hauteur : (strlen($texte_formate)/strlen($clef)), longueur: strlen($clef));
-        $tableau_chiffre = $this->melanger_tableau($tableau_clair, $clef, $alphabet);
-        $tableau_chiffre = $this->melanger_tableau($tableau_chiffre, $clef, $alphabet);
+        $hauteur = (int) ceil(strlen($texte_formate) / strlen($clef));
+        $longueur = strlen($clef);
+        $tableau_clair = Tableau::fromText($texte_formate,$hauteur, $longueur)->obtenir_tableau();
+        $tableau_chiffre = $this->melanger_tableau($tableau_clair, $clef, $alphabet->obtenir_tableau());
+        $tableau_chiffre = $this->melanger_tableau($tableau_chiffre, $clef, $alphabet->obtenir_tableau());
 
-        // NOTE: Je lis la réponse en fesant des groupes de strlen($key) alors qu'en ligne ils disent qu'ils faut faire des groupes de strlen($text)/$strlen($key).
+        // NOTE: Je lis la réponse en fesant des groupes de strlen($key) alors qu'en ligne ils semblent dire qu'ils faut faire des groupes de strlen($text)/$strlen($key).
         return $this->tableau_tostring($tableau_chiffre);
     }
 
-    public function dechiffrer($texte_chiffre, $clef, $alphabet)
+    public function dechiffrer($texte_chiffre, $clef, $alphabet) // Non fonctionnel.
     {
         $texte_formate = str_replace(" ", "", $texte_chiffre);
-        $tableau_clair = creer_tableau(liste_lettres : $texte_formate, hauteur : (strlen($texte_formate)/strlen($clef)), longueur: strlen($clef));
-        $tableau_chiffre = $this->melanger_tableau2($tableau_clair, $clef, $alphabet);
-        $tableau_chiffre = $this->melanger_tableau2($tableau_chiffre, $clef, $alphabet);
+        $hauteur = (int) ceil(strlen($texte_formate) / strlen($clef));
+        $longueur = strlen($clef);
+        $tableau_chiffre = Tableau::fromText($texte_formate,$hauteur, $longueur)->obtenir_tableau();
+        $tableau_clair = $this->melanger_tableau2($tableau_chiffre, $clef, $alphabet->obtenir_tableau());
+        $tableau_clair = $this->melanger_tableau2($tableau_clair, $clef, $alphabet->obtenir_tableau());
 
-        return $this->tableau_tostring($tableau_chiffre);
+        //return $this->tableau_tostring($tableau_clair);
+        return "Fonction incomplète.";
     }
 
-    function melanger_tableau($tableau_entree, $clef, $alphabet)
+    private function melanger_tableau($tableau_entree, $clef, $alphabet)
     {
         // Lit et réécrit chaque colone, à l'horizontale, en suivant l'ordre alphabétique de la clef. 
         $ordre_clef = $this->get_key_order($alphabet, $clef); // L'ordre alphabétique de la clef, pour ENIGNE vaut [0, 5, 3, 2, 4, 1]
-        $tableau_sortie = array();
-        $nouvelle_rangee = array();
+        $tableau_sortie = [];
+        $nouvelle_rangee = [];
         for($i = 0; $i < strlen($clef); $i++)
         {
             for($rangee = 0; $rangee < count($tableau_entree); $rangee++)
@@ -54,12 +59,12 @@ class ChiffreUBCHI implements Ichiffre
         return $tableau_sortie;
     }
 
-    function melanger_tableau2($tableau_entree, $clef, $alphabet)
+    private function melanger_tableau2($tableau_entree, $clef, $alphabet)
     {
         // Lit et réécrit chaque colone, à l'horizontale, en suivant l'ordre alphabétique de la clef. 
         $ordre_clef = $this->get_key_order($alphabet, $clef); // L'ordre alphabétique de la clef, pour ENIGNE vaut [0, 5, 3, 2, 4, 1]
-        $tableau_sortie = array();
-        $nouvelle_rangee = array();
+        $tableau_sortie = [];
+        $nouvelle_rangee = [];
 
         for($rangee = 0; $rangee < count($tableau_entree); $rangee++)
         {   
@@ -86,7 +91,7 @@ class ChiffreUBCHI implements Ichiffre
         return $tableau_sortie;
     }
 
-    function ordonner_alphabetiquement($alphabet, $texte)// Prend un alphabet (array) et du texte, retourne le texte en ordre alphabetique.
+    private function ordonner_alphabetiquement($alphabet, $texte)// Prend un alphabet (array) et du texte, retourne le texte en ordre alphabetique.
     {
         $texte_nombre = array();
         foreach(str_split($texte) as $lettre)
@@ -113,7 +118,7 @@ class ChiffreUBCHI implements Ichiffre
     }
 
 
-    function get_key_order($alphabet, $clef)
+    private function get_key_order($alphabet, $clef)
     {
         $clef_temp = str_split($clef);
         $clef_alpha = $this->ordonner_alphabetiquement($alphabet, $clef);
@@ -135,13 +140,13 @@ class ChiffreUBCHI implements Ichiffre
         return $ordre_clef;
     }
 
-    function tableau_tostring($tableau)
+    private function tableau_tostring($tableau)
     {
-        //Convertit un tableau 2D en string, chaque liste est séparée par un espace.
+        //Convertit un tableau 2D en string, chaque sous_tableau est séparée par un espace.
         $tableau_string = "";
-        foreach($tableau as $liste)
+        foreach($tableau as $sous_tableau)
         {
-            $tableau_string = $tableau_string.implode($liste)." ";
+            $tableau_string = $tableau_string.implode($sous_tableau)." ";
         }
         return $tableau_string; 
     }

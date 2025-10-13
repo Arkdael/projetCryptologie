@@ -1,6 +1,7 @@
 <?php
-require "IChiffre.php";
-require __DIR__ . "/../utils/modulo.php";
+require_once "IChiffre.php";
+require_once __DIR__ . "/../utils/modulo.php";
+require_once __DIR__ . "/../utils/Tableau.php";
 
 class ChiffreDecalage implements Ichiffre
 {
@@ -10,25 +11,25 @@ class ChiffreDecalage implements Ichiffre
 
         foreach(str_split($texte_clair) as $lettre)
         {
-            $valeur_lettre = array_search($lettre, $alphabet);
-            if($valeur_lettre !== false) //Vrai si le caractere est dans l'alphabet, faux sinon (Note: 0 === null donc doit faire false car pas même type).
+            $coordonnees_lettre = $alphabet->recherche_recursive($alphabet->obtenir_tableau(), $lettre);
+            if($coordonnees_lettre != null)
             {
-                $nouvelle_valeur_lettre =  modulo(($valeur_lettre + $clef * 2), count($alphabet));
-                $texte_chiffre = $texte_chiffre . $alphabet[$nouvelle_valeur_lettre];
+                $nouvelles_coordonnees = [modulo($coordonnees_lettre[0] + $clef, count($alphabet->obtenir_tableau())), $coordonnees_lettre[1]];
+                $texte_chiffre .= $alphabet->obtenir_tableau()[$nouvelles_coordonnees[0]][$nouvelles_coordonnees[1]]; //Manque de verifications, possibilite oob.
             }
-            else //Assume que si pas dans alphabet, est ponctuation donc laisse tel quel.
+            else // Assume que si pas dans alphabet est ponctuation donc laisse tel quel.
             {
-                $texte_chiffre = $texte_chiffre . $lettre; 
+                $texte_chiffre .= $lettre;
             }
-            }
+        }
         return $texte_chiffre;
     }
-
+    
     public function dechiffrer($texte_chiffre, $clef, $alphabet)
     {
         $clef_inverse = $clef * -1; 
-        return $this->chiffrer($texte_chiffre, $clef_inverse, $alphabet);
+        $texte_clair = $this->chiffrer($texte_chiffre, $clef_inverse, $alphabet);
+        return $texte_clair;
     }
 }
-
 ?>

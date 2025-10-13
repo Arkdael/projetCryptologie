@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
   <?php
-    require "../src/services/service.php";
-    require "../src/models/ChiffrePolybe.php";
-    require_once "../src/utils/creerTableau2D.php";
-    require_once "../src/utils/creerAlphabet.php";
+    require_once __DIR__ . "/../src/controllers/ChiffreController.php";
+    $controller = new ChiffreController();
+    $chiffre_courrantVM = $controller->get("polybe");
 
-    $chiffre_courrant = new ChiffrePolybe();
-    $_carre = creer_tableau(creer_variante_alphabet($_GET["clef"], constant("ALPHABET_LATIN_MAJ")), 5, 5); //TODO gérer la 26e lettre.
+    $nouvel_alphabet = $chiffre_courrantVM->alphabet->creer_variante_alphabet($chiffre_courrantVM->clef??"", $chiffre_courrantVM->alphabet);
+    $_carre = Tableau::fromText(implode($nouvel_alphabet->obtenir_tableau()), sqrt((float)$nouvel_alphabet->nb_lettres()), sqrt((float)$nouvel_alphabet->nb_lettres()));
   ?>
   <head>
-      <title>Carré de Polybe</title>
+      <title><?php echo htmlspecialchars($chiffre_courrantVM->titre);?></title>
       <link rel="stylesheet" href="css/style.css">
   </head>
 
@@ -18,26 +17,16 @@
     <?php include "../src/layout/header.php"?>
     <div class="page">
 	    <main>
-        <h2>Carré de Polybe</h2>
+        <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
         <form action="polybe.php" method="GET">
-
           <div class="formItem">
   			    <label for="texte_clair">Texte clair</label><br>
-  			    <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php
-              if(isset($_GET["chiffrer"]))
-              {
-                echo $_GET["texte_clair"];
-              }
-              else
-              {
-                echo $chiffre_courrant->dechiffrer($_GET["texte_chiffre"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
-              }
-            ?></textarea><br>
+  			    <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_clair;?></textarea><br>
           </div>
 
           <div class="formItem">
             <label for="clef">Clef</label><br>
-  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo $_GET["clef"]?>"/><br>
+  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo $chiffre_courrantVM->clef?>"/><br>
           </div>
 
           <div class="formItem">
@@ -47,7 +36,7 @@
               <tr>
                 <th> </th>
                 <?php //Le header au dessus du carré.
-                    $longueur_tableau = count($_carre[0]); //Prend la taille de la première rangée donc pose problème si les longueurs varient. 
+                    $longueur_tableau = count($_carre->obtenir_tableau()[0]); //Prend la taille de la première rangée donc pose problème si les longueurs varient. 
                     for($colonne = 0; $colonne < $longueur_tableau; $colonne++)
                     {
                       echo '<th>'.($colonne+1).'</th>';
@@ -57,15 +46,14 @@
 
               <?php // Le contenu du carré + des header sur les côtés.
                 $index_rangee = 0;
-                foreach($_carre as $rangee)
+                foreach($_carre->obtenir_tableau() as $rangee)
                 {
                   echo '<tr>';
                   echo '<th>'.($index_rangee+1).'</th>';
-                  $index_colone = 0;
-                  foreach($_carre as $colonne)
+                  $index_colonne = 0;
+                  foreach($rangee as $colonne)
                   {
-                    echo '<td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="'. $_carre[$index_rangee][$index_colone].'"></td>';
-                    $index_colone++;
+                    echo '<td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="'. $colonne.'"></td>';
                   }
                   echo '</tr>';
                   $index_rangee++;
@@ -73,23 +61,13 @@
               ?>
             </table>
           </div>
-
+          <div class="formItem">
+  			    <label for="texte_chiffre">Texte chiffré</label><br>
+            <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_chiffre;?></textarea>
+          </div>
           <div class="formItem" style="display: inline-block">
               <input class="formInput" type="submit" name="chiffrer" value="Chiffrer">
               <input class="formInput" type="submit" name="dechiffrer" value="Déchiffrer">
-          </div>
-          <div class="formItem">
-  			    <label for="texte_chiffre">Texte chiffré</label><br>
-            <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php
-              if(isset($_GET["dechiffrer"]))
-              {
-                echo $_GET["texte_chiffre"];
-              }
-              else
-              {
-                echo $chiffre_courrant->chiffrer($_GET["texte_clair"], $_GET["clef"], constant("ALPHABET_LATIN_MAJ"));
-              }
-             ?></textarea>
           </div>
 		    </form> 
 	    </main>
