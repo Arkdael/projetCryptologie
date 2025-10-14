@@ -7,6 +7,7 @@ class ChiffreDecalage implements Ichiffre
 {
     public function chiffrer($texte_clair, $clef, $alphabet)
     {
+
         $texte_chiffre = "";
 
         foreach(str_split($texte_clair) as $lettre)
@@ -14,7 +15,7 @@ class ChiffreDecalage implements Ichiffre
             $coordonnees_lettre = $alphabet->recherche_recursive($alphabet->obtenir_tableau(), $lettre);
             if($coordonnees_lettre != null)
             {
-                $nouvelles_coordonnees = [modulo($coordonnees_lettre[0] + $clef, count($alphabet->obtenir_tableau())), $coordonnees_lettre[1]];
+                $nouvelles_coordonnees = [modulo($coordonnees_lettre[0] + (int)$clef, count($alphabet->obtenir_tableau())), $coordonnees_lettre[1]];
                 $texte_chiffre .= $alphabet->obtenir_tableau()[$nouvelles_coordonnees[0]][$nouvelles_coordonnees[1]]; //Manque de verifications, possibilite oob.
             }
             else // Assume que si pas dans alphabet est ponctuation donc laisse tel quel.
@@ -27,7 +28,7 @@ class ChiffreDecalage implements Ichiffre
     
     public function dechiffrer($texte_chiffre, $clef, $alphabet)
     {
-        $clef_inverse = $clef * -1; 
+        $clef_inverse = (int)$clef * -1; 
         $texte_clair = $this->chiffrer($texte_chiffre, $clef_inverse, $alphabet);
         return $texte_clair;
     }

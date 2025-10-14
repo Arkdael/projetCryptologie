@@ -1,6 +1,8 @@
 <?php 
 interface IChiffreViewModel
 {
+    public string $nom { get; set;}
+
     public string $titre { get; set;}
     
     public string $description { get; set;}

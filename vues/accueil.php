@@ -3,12 +3,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Accueil</title>
-    <link rel="stylesheet" href="css/style.css">
-    <?php include "../src/services/service.php"; ?>
+    <link rel="stylesheet" href="/css/style.css">
   </head>
 
   <body>
-    <?php include "../src/layout/header.php"?>
+    <?php include __DIR__ . "/../src/layout/header.php"?>
     <main>
       <h2>Présentation du projet</h2>
       <p>
@@ -26,6 +25,6 @@
         Bonne visite!
       </p>
     </main>
-    <?php include "../src/layout/footer.php"?>
+    <?php include __DIR__ . "/../src/layout/footer.php"?>
   </body>
 </html>

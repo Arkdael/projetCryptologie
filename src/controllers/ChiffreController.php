@@ -12,7 +12,7 @@ class ChiffreController
             'classe' => ChiffreDecalage::class,
             'titre' => "Chiffrement par décalage",
             'description' => "Chiffrement par décalage (chiffre de César)",
-            'nomAlphabetDefaut'=> "ALPHABET_LATIN_MIXTE"
+            'nomAlphabetDefaut'=> "ALPHABET_LATIN_COMPLET"
         ],
         'polybe' => [
             'classe' => ChiffrePolybe::class,
@@ -28,23 +28,24 @@ class ChiffreController
         ],
     ];
 
-
-    public function get(string $nom)
+    public function getViewModel(array $params)
     {
-        $infos = $this::$_chiffres[strtolower($nom)]?? throw new Exception("Modèle de chiffre '".strtolower($nom)."' introuvable.");
+        $infos = $this::$_chiffres[strtolower($params['nom'])]?? throw new Exception("Modèle de chiffre '".strtolower($params['chiffre'])."' introuvable.");
         $chiffre_courrant = new $infos['classe'];
         $chiffreVM = new ChiffreViewModel($infos['titre'], $infos['description']);
 
+
+        $chiffreVM->nom = $params['nom']??'';
         $chiffreVM->alphabet = constant($infos['nomAlphabetDefaut']); //TODO permettre personalisation de l'alphabet.
-        $chiffreVM->clef = $_GET["clef"];
-        if(isset($_GET["chiffrer"]))
+        $chiffreVM->clef = $params['clef'];
+        if($params['action'] == 'Chiffrer')
         {
-            $chiffreVM->texte_clair = $_GET["texte_clair"];
+            $chiffreVM->texte_clair = $params["texte_clair"];
             $chiffreVM->texte_chiffre = $chiffre_courrant->chiffrer($chiffreVM->texte_clair, $chiffreVM->clef, $chiffreVM->alphabet);
         }
-        elseif(isset($_GET["dechiffrer"]))
+        elseif($params['action'] == 'Déchiffrer')
         {
-            $chiffreVM->texte_chiffre = $_GET["texte_chiffre"];
+            $chiffreVM->texte_chiffre = $params["texte_chiffre"];
             $chiffreVM->texte_clair =  $chiffre_courrant->dechiffrer($chiffreVM->texte_chiffre, $chiffreVM->clef, $chiffreVM->alphabet);
         }
         return $chiffreVM;

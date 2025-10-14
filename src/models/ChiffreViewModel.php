@@ -2,6 +2,8 @@
 require_once "IChiffreViewModel.php";
 class ChiffreViewModel implements IChiffreViewModel
 {
+    public string $nom;
+    
     public string $titre;
     public string $description;
 

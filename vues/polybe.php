@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <?php
-    require_once __DIR__ . "/../src/controllers/ChiffreController.php";
-    $controller = new ChiffreController();
-    $chiffre_courrantVM = $controller->get("polybe");
-
-    $nouvel_alphabet = $chiffre_courrantVM->alphabet->creer_variante_alphabet($chiffre_courrantVM->clef??"", $chiffre_courrantVM->alphabet);
-    $_carre = Tableau::fromText(implode($nouvel_alphabet->obtenir_tableau()), sqrt((float)$nouvel_alphabet->nb_lettres()), sqrt((float)$nouvel_alphabet->nb_lettres()));
-  ?>
   <head>
       <title><?php echo htmlspecialchars($chiffre_courrantVM->titre);?></title>
-      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="/css/style.css">
   </head>
-
   <body>
-    <?php include "../src/layout/header.php"?>
+    <?php include __DIR__ . "/../src/layout/header.php"?>
     <div class="page">
 	    <main>
         <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
-        <form action="polybe.php" method="GET">
+        <form action="<?php echo "/public/". $chiffre_courrantVM->nom;?>" method="GET">
           <div class="formItem">
   			    <label for="texte_clair">Texte clair</label><br>
   			    <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_clair;?></textarea><br>
@@ -66,12 +57,12 @@
             <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_chiffre;?></textarea>
           </div>
           <div class="formItem" style="display: inline-block">
-              <input class="formInput" type="submit" name="chiffrer" value="Chiffrer">
-              <input class="formInput" type="submit" name="dechiffrer" value="Déchiffrer">
+            <input class="formInput" type="submit" name="action" value="Chiffrer">
+            <input class="formInput" type="submit" name="action" value="Déchiffrer">
           </div>
 		    </form> 
 	    </main>
     </div>
-    <?php include "../src/layout/footer.php"?>
+    <?php include __DIR__ . "/../src/layout/footer.php"?>
   </body>
 </html>
