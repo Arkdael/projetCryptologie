@@ -5,6 +5,7 @@ require_once __DIR__ . "/../services/service.php";
 require_once __DIR__ . "/../models/ChiffreDecalage.php";
 require_once __DIR__ . "/../models/ChiffrePolybe.php";
 require_once __DIR__ . "/../models/ChiffreUBCHI.php";
+require_once __DIR__ . "/../models/ChiffreAES.php";
 class ChiffreController
 {
     private static $_chiffres = [
@@ -24,6 +25,12 @@ class ChiffreController
             'classe' => ChiffreUBCHI::class,
             'titre' => "Chiffrement UBCHI",
             'description' => "Chiffrement UBCHI",
+            'nomAlphabetDefaut'=> "ALPHABET_LATIN_MAJ"
+        ],
+        'aes' => [
+            'classe' => ChiffreAES::class,
+            'titre' => "Chiffrement AES",
+            'description' => "Chiffrement AES",
             'nomAlphabetDefaut'=> "ALPHABET_LATIN_MAJ"
         ],
     ];

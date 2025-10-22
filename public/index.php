@@ -17,15 +17,16 @@ $params = [
 
 switch(strtolower($path))
 {
-    case "/public/accueil" : include __DIR__ . "/../vues/accueil.php"; die();
-    case "/public/cesar" : $chiffre_courrantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/cesar.php"; die();
-    case "/public/polybe" : 
+    case "/accueil" : include __DIR__ . "/../vues/accueil.php"; die();
+    case "/cesar" : $chiffre_courrantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/cesar.php"; die();
+    case "/polybe" : 
         $chiffre_courrantVM = $controller->getViewModel($params);
         $nouvel_alphabet = $chiffre_courrantVM->alphabet->creer_variante_alphabet($chiffre_courrantVM->clef??"", $chiffre_courrantVM->alphabet);
         $_carre = Tableau::fromText(implode($nouvel_alphabet->obtenir_tableau()), sqrt((float)$nouvel_alphabet->nb_lettres()), sqrt((float)$nouvel_alphabet->nb_lettres()));
         include __DIR__ . "/../vues/polybe.php"; 
         die();
-    case "/public/ubchi" : $chiffre_courrantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/UBCHI.php"; die();
+    case "/ubchi" : $chiffre_courrantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/UBCHI.php"; die();
+    case "/aes" : $chiffre_courrantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/cesar.php"; die();
     default : echo "Not found"; die();
 }
 ?>

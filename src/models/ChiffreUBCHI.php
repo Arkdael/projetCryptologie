@@ -82,7 +82,6 @@ class ChiffreUBCHI implements Ichiffre
                 }
             }
         }
-            
         
         if(count($nouvelle_rangee) > 0)
         {

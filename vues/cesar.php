@@ -2,14 +2,14 @@
 <html>
     <head>
         <title><?php echo htmlspecialchars($chiffre_courrantVM->titre);?></title>
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="css/style.css"> 
     </head>
     <body>
         <?php include __DIR__ . "/../src/layout/header.php"?>
         <div class="page">
 	        <main>
                 <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
-                <form action="<?php echo "/public/". $chiffre_courrantVM->nom;?>" method="GET">
+                <form action="<?php echo $chiffre_courrantVM->nom;?>" method="GET">
                     <div class="formItem">
                         <label for="texte_clair">Texte clair</label><br>
   			            <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo htmlspecialchars($chiffre_courrantVM->texte_clair);?></textarea><br>

@@ -1,7 +1,7 @@
 <?php
 class Tableau
 {
-    private array $_tableau = [];
+    public array $_tableau = [];
 
     public function obtenir_tableau()
     {
@@ -38,11 +38,11 @@ class Tableau
                 array_push($array, $nouvelle_rangee);
             }
         }
-        $new = new static($array);
-        return $new;
+        $nouveau_tableau = new static($array);
+        return $nouveau_tableau;
     }
 
-    public function recherche2D($texte) //Obsolète.
+    public function recherche2D($texte) // Obsolète.
     {
         for ($rangee = 0; $rangee < count($this->_tableau); $rangee++)
         {
@@ -83,6 +83,19 @@ class Tableau
             $coordonnees[count($coordonnees) -1]++;
         }
         return null; // La valeur n'a pas été trouvé. 
+    }
+
+    // Decale une rangee i de i position vers la gauche en bouclant vers le droite (ABCD -> BCDA).
+    public function decaler_rangee($index_rangee, $valeur_decalage, array $tableau = self::_tableau) : array
+    {
+        $rangee_temp = $tableau[$index_rangee];
+        
+        for($index = 0; $index < count($rangee_temp); $index++)
+        {
+            $nouvelle_position = mon_modulo(($index + $valeur_decalage), count($tableau[$index_rangee]));
+            $tableau[$index_rangee][$nouvelle_position] = $rangee_temp[$index];
+        }
+        return $tableau[$index_rangee];
     }
 }
 ?>

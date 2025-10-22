@@ -9,7 +9,7 @@ class ChiffreViewModel implements IChiffreViewModel
 
     public string $texte_clair = "";
     public string $texte_chiffre = "";
-    public $clef;
+    public mixed $clef;
     public Alphabet $alphabet;
 
     public function __construct(string $titre = "", string $description = "") 

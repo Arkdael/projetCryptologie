@@ -11,6 +11,6 @@ interface IChiffreViewModel
 
     public string $texte_chiffre { get; set;}
 
-    public $clef { get; set;}
+    public mixed $clef { get; set;}
 } 
 ?>
