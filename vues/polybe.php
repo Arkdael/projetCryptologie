@@ -29,7 +29,6 @@
               <tr>
                 <th> </th>
                 <?php // Le header au dessus du carré.
-                <?php // Le header au dessus du carré.
                     $longueur_tableau = count($_carre->obtenir_tableau()[0]); //Prend la taille de la première rangée donc pose problème si les longueurs varient. 
                     for($colonne = 0; $colonne < $longueur_tableau; $colonne++)
                     {
