@@ -9,7 +9,7 @@
   <body>
     <?php include __DIR__ . "/../src/layout/header.php"?>
     <main>
-      <h2>Présentation du projet</h2>
+      <h1>Présentation du projet</h1>
       <p>
         Bonjour, ceci est petit projet personnel où je m'amuse à répliquer différentes méthodes de chiffrement.
       </p>

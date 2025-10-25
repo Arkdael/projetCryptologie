@@ -42,23 +42,6 @@ class Tableau
         return $nouveau_tableau;
     }
 
-    public function recherche2D($texte) // Obsolète.
-    {
-        for ($rangee = 0; $rangee < count($this->_tableau); $rangee++)
-        {
-            for ($colonne = 0; $colonne < count($this->_tableau[$rangee]); $colonne++)
-            {
-                if ($this->_tableau[$rangee][$colonne] == $texte)
-                {
-                    $position = [];
-                    array_push($position, $rangee);
-                    array_push($position, $colonne);
-                    return $position;
-                }
-            }
-        }
-    }
-
     /* Si la valeur est dans le tableau, retourne un jeu de coordonnées de taille variable qui représente sa position dans le tableau.
     Par exemple, pour l'array [[A,a], [B,b], [C,c,Ç,ç], ...] chercher 'ç' retourne [2,3]. 
     Tandis que pour l'array [A, B, C, D, ...] chercher 'D' retourne [3]. Et pour l'array [  [ ["A","À"],["a","à"] ], [ ["B","B"],["b","b"] ]  ] chercher à retourne [0,1,1]*/

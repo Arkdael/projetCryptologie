@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title><?php echo htmlspecialchars($chiffre_courrantVM->titre);?></title>
+      <title><?php echo htmlspecialchars($chiffre_courantVM->titre);?></title>
       <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <?php include __DIR__ . "/../src/layout/header.php"?>
     <div class="page">
 	    <main>
-        <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
-        <form action="<?php echo $chiffre_courrantVM->nom;?>" method="GET">
-          <div class="formItem">
-  			    <label for="texte_clair">Texte clair</label><br>
-  			    <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_clair;?></textarea><br>
-          </div>
+        <?php include __DIR__ . "/../src/layout/component_infos.php"?>
+
+        <form method="GET">
+
+          <?php include __DIR__ . "/../src/layout/formComponent_texteClair.php"?>
 
           <div class="formItem">
             <label for="clef">Clef</label><br>
-  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo $chiffre_courrantVM->clef?>"/><br>
+  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courantVM->clef);?>"/><br>
           </div>
 
           <div class="formItem">
             <label for="_carre">Carré</label><br>
-            <table name="_carre"> 
+            <table name="_carre" tabindex=0> 
               <!-- Créer le visuel du carré dynamiquement-->
               <tr>
                 <th> </th>
-                <?php //Le header au dessus du carré.
+                <?php // Le header au dessus du carré.
                     $longueur_tableau = count($_carre->obtenir_tableau()[0]); //Prend la taille de la première rangée donc pose problème si les longueurs varient. 
                     for($colonne = 0; $colonne < $longueur_tableau; $colonne++)
                     {
@@ -44,7 +43,7 @@
                   $index_colonne = 0;
                   foreach($rangee as $colonne)
                   {
-                    echo '<td><input class="itemTableau" type="text" maxlength=1 size=1 readonly value="'. $colonne.'"></td>';
+                    echo '<td><input class="itemTableau" tabindex="-1" type="text" maxlength=1 size=1 readonly value="'. $colonne.'"></td>';
                   }
                   echo '</tr>';
                   $index_rangee++;
@@ -52,14 +51,10 @@
               ?>
             </table>
           </div>
-          <div class="formItem">
-  			    <label for="texte_chiffre">Texte chiffré</label><br>
-            <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php echo $chiffre_courrantVM->texte_chiffre;?></textarea>
-          </div>
-          <div class="formItem" style="display: inline-block">
-            <input class="formInput" type="submit" name="action" value="Chiffrer">
-            <input class="formInput" type="submit" name="action" value="Déchiffrer">
-          </div>
+
+         <?php include __DIR__ . "/../src/layout/formComponent_texteChiffre.php"?>
+
+         <?php include __DIR__ . "/../src/layout/formComponent_submit.php"?>
 		    </form> 
 	    </main>
     </div>

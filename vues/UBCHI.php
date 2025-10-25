@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo htmlspecialchars($chiffre_courrantVM->titre);?></title>
+        <title><?php echo htmlspecialchars($chiffre_courantVM->titre);?></title>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <?php include __DIR__ . "/../src/layout/header.php"?>
         <div class="page">
 	        <main>
-                <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
-                <form action="<?php echo $chiffre_courrantVM->nom;?>" method="GET">
-                    <div class="formItem">
-                        <label for="texte_clair">Texte clair</label><br>
-  			            <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo htmlspecialchars($chiffre_courrantVM->texte_clair);?></textarea><br>
-                    </div>
+                <?php include __DIR__ . "/../src/layout/component_infos.php"?>
+                <form method="GET">
+
+                    <?php include __DIR__ . "/../src/layout/formComponent_texteClair.php"?>
+
                     <div class="formItem">
                         <label for="clef">Clef</label><br>
-  			            <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courrantVM->clef)?>" required></input><br>
+  			            <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courantVM->clef);?>" required></input><br>
                     </div>
-                    <div class="formItem">
-  			            <label for="texte_chiffre">Texte chiffré</label><br>
-  			            <textarea class="formInput" id="texte_chiffre" name="texte_chiffre" rows="4" cols="50"><?php echo htmlspecialchars($chiffre_courrantVM->texte_chiffre);?></textarea>
-                    </div>
-                    <div class="formItem" style="flex-direction:row;-">
-                        <input class="formInput" type="submit" name="action" value="Chiffrer">
-                        <input class="formInput" type="submit" name="action" value="Déchiffrer">
-                    </div>
+
+                    <?php include __DIR__ . "/../src/layout/formComponent_texteChiffre.php"?>
+
+                    <?php include __DIR__ . "/../src/layout/formComponent_submit.php"?>
 		        </form>
 	        </main>
         </div>
