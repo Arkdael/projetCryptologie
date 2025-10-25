@@ -8,11 +8,12 @@
         <?php include __DIR__ . "/../src/layout/header.php"?>
         <div class="page">
 	        <main>
-                <?php include __DIR__ . "/../src/layout/component_infos.php"?>
+                <h2><?php echo htmlspecialchars($chiffre_courrantVM->description);?></h2>
                 <form method="GET">
-
-                    <?php include __DIR__ . "/../src/layout/formComponent_texteClair.php"?>
-
+                    <div class="formItem">
+                        <label for="texte_clair">Texte clair</label><br>
+  			            <textarea class="formInput" id="texte_clair" name="texte_clair" rows="4" cols="50"><?php echo htmlspecialchars($chiffre_courrantVM->texte_clair);?></textarea><br>
+                    </div>
                     <div class="formItem">
                         <label for="clef">Clef</label><br>
   			            <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courantVM->clef);?>" required></input><br>
