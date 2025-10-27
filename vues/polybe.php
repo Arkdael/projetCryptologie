@@ -18,13 +18,11 @@
           <div class="formItem">
             <label for="clef">Clef</label><br>
   			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courantVM->clef);?>"/><br>
-  			    <input class="formInput" type="text" id="clef" name="clef" value="<?php echo htmlspecialchars($chiffre_courantVM->clef);?>"/><br>
           </div>
 
           <div class="formItem">
             <label for="_carre">Carré</label><br>
-            <table name="_carre" tabindex=0> 
-            <table name="_carre" tabindex=0> 
+            <table name="_carre" tabindex=0> <!-- J'aimerais faire qu'on puisse naviguer le carre avec les fleches mais le skip avec 1 seul tab.-->
               <!-- Créer le visuel du carré dynamiquement-->
               <tr>
                 <th> </th>
@@ -47,7 +45,6 @@
                   foreach($rangee as $colonne)
                   {
                     echo '<td><input class="itemTableau" tabindex="-1" type="text" maxlength=1 size=1 readonly value="'. $colonne.'"></td>';
-                    echo '<td><input class="itemTableau" tabindex="-1" type="text" maxlength=1 size=1 readonly value="'. $colonne.'"></td>';
                   }
                   echo '</tr>';
                   $index_rangee++;
@@ -55,10 +52,6 @@
               ?>
             </table>
           </div>
-
-         <?php include __DIR__ . "/../src/layout/formComponent_texteChiffre.php"?>
-
-         <?php include __DIR__ . "/../src/layout/formComponent_submit.php"?>
 
          <?php include __DIR__ . "/../src/layout/formComponent_texteChiffre.php"?>
 
