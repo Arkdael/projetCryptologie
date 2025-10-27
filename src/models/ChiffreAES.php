@@ -97,12 +97,12 @@ class ChiffreAES implements Ichiffre
 
         // Diviser l'hexadecimal selon la taille de bloc. Avec padding pour les textes < 128 bits.
 
-        $array = [
+        $array = [ // Random
             [
-                [0x2b,0x2b,0x2b,0x2b],
-                [0x2b,0x2b,0x2b,0x2b],
-                [0x2b,0x2b,0x2b,0x2b],
-                [0x2b,0x2b,0x2b,0x2b]
+                ["60", "81", "4F", "DC"],
+                ["22", "2A", "90", "88"],
+                ["DE", "5E", "0B", "DB"],
+                ["E0", "32", "3A", "0A"]
             ],
         ];
         // Retourne un array de Tableau 2D pour chaque matrice de bloc. 
@@ -113,9 +113,9 @@ class ChiffreAES implements Ichiffre
 
     private function effectuer_ronde(array $tableau, $clef)
     {
-        $tableau = $this->susbstituer_octets($tableau, $this::LOOKUP_TABLE); // Étape 1: On change chaque octets du tableau par son équivalant dans la lookup table.
+        $tableau = $this->substituer_octets($tableau, $this::LOOKUP_TABLE); // Étape 1: On change chaque octets du tableau par son équivalant dans la lookup table.
         $tableau = $this->decaler_rangees($tableau); // Étape 2: On decale chaque rangée de i position. 
-        $tableau = $this->melanger_colonnes($tableau); // Étape 3: On transforme les colonnes ...
+        $tableau = $this->melanger_colonnes($tableau, $this::MATRICE); // Étape 3: On transforme les colonnes ...
         $tableau = $this->ajouter_clef($tableau, $this->calculer_clef_de_ronde($clef, $this::LOOKUP_TABLE)); // Étape 4: On fais un XOR sur le tableau avec la clef de ronde. 
 
         return $tableau;
@@ -123,7 +123,7 @@ class ChiffreAES implements Ichiffre
 
     private function effectuer_ronde_finale(array $tableau, $clef)
     {
-        $tableau = $this->susbstituer_octets($tableau, $this::LOOKUP_TABLE); // Étape 1: On change chaque octets du tableau par son équivalant dans la lookup table.
+        $tableau = $this->substituer_octets($tableau, $this::LOOKUP_TABLE); // Étape 1: On change chaque octets du tableau par son équivalant dans la lookup table.
         $tableau = $this->decaler_rangees($tableau); // Étape 2: On decale chaque rangée de i position. 
         $tableau = $this->ajouter_clef($tableau, $this->calculer_clef_de_ronde($clef, $this::LOOKUP_TABLE)); // Étape 3: On fais un XOR sur le tableau avec la clef de ronde. 
 
@@ -131,14 +131,14 @@ class ChiffreAES implements Ichiffre
     }
 
     // Retourne le byte correspondant dans la table.
-    private function susbstituer_octets(array $tableau, array $lookup_table)
+    private function substituer_octets(array $tableau, array $lookup_table)
     {
         for($rangee = 0; $rangee < count($tableau); $rangee++)
         {
             for($colonne = 0; $colonne < count($tableau[$rangee]); $colonne++)
             {
                 $octet = $tableau[$rangee][$colonne];
-                $tableau[$rangee][$colonne] = $lookup_table[$octet];
+                $tableau[$rangee][$colonne] = $lookup_table[hexdec($octet)];
             }
         }
         return $tableau;
@@ -164,19 +164,9 @@ class ChiffreAES implements Ichiffre
 
 
     // Retourne un Tableau avec la colonne à l'index "transformée par un produit matrice-vecteur" (je sais pas encore ce que c'est).
-    private function melanger_colonnes($index_colonne, array $tableau, array $matrice) : array
+    private function melanger_colonnes(array $tableau, array $matrice) : array
     {
-        for($index = 0; $index > count($tableau[0]); $index++)
-        {
-            $colonne_temp = [];
-
-        }
-        $colonne_temp = $tableau[$index_colonne]; //!
-        $vecteur = 0;
-        for($index = 0; $index < count($matrice); $index++)
-        {
-            $vecteur += modulo($matrice[$index] * $colonne_temp[modulo($index, $count($colonne_temp))], 256);
-        }
+        // TODO
         return $tableau;
     }
 
@@ -184,28 +174,33 @@ class ChiffreAES implements Ichiffre
     {
         for($rangee = 0; $rangee < count($tableau); $rangee++)
         {
-            for($colonne = 0; $colonne < count($rangee); $colonne++)
+            for($colonne = 0; $colonne < count($tableau); $colonne++)
             {
-                $resultat_XOR = $tableau[$rangee][$colonne] ^ $clef_de_ronde[$colonne];
-                $tableau[$rangee][$colonne] = $resultat_XOR;
+                $resultat_XOR = hexdec($tableau[$rangee][$colonne]) ^ hexdec($clef_de_ronde[$colonne]);
+                $tableau[$rangee][$colonne] = dechex($resultat_XOR);
             }
         }
         return $tableau;
     }
 
-    private function calculer_clef_de_ronde($clef, $lookup_table)
+    private function calculer_clef_de_ronde(string $clef, array $lookup_table)
     {
         // TODO
 
-        // Étape 1: Diviser la clef initiale en mots de 4 octets. 
-        $mots = explode(" ", $clef, 8);
-        // Étape 2: 
-        $w4 = $mots[0] ^ $this->core($mots[3]);
-        $w5 = $w4 ^ $mots[1];
-        $w6 = $w5 ^ $mots[2]; 
-        $w7 = $w6 ^ $mots[3];
+        // Étape 1: Diviser la clef initiale en mots de 4 octets.
+        $clef = "2b7e151628aed2a6abf7158809cf4f3c"; // Test.
+        $mots = str_split($clef, 8);
+
+        // Étape 2: Créer la nouvelle clef.
+        $w4 = dechex(hexdec($mots[0]) ^ $this->core(hexdec($mots[3])));
+        $w5 = dechex(hexdec($w4) ^ hexdec($mots[1]));
+        $w6 = dechex(hexdec($w5) ^ hexdec($mots[2]));
+        $w7 = dechex(hexdec($w6) ^ hexdec($mots[3]));
 
         $nouvelle_clef = $w4 . $w5 . $w6. $w7;
+        $test = Tableau::fromText($nouvelle_clef, 1, 4);
+
+        return $test->_tableau;
     }
 
     private function core($mot) // Applique des transformations à un mot.
