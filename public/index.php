@@ -27,7 +27,7 @@ switch(strtolower($path))
         include __DIR__ . "/../vues/polybe.php"; 
         die();
     case "/ubchi" : $chiffre_courantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/UBCHI.php"; die();
-    case "/aes" : $chiffre_courantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/cesar.php"; die();
+    case "/aes" : $chiffre_courantVM = $controller->getViewModel($params); include __DIR__ . "/../vues/aes.php"; die();
     default : include __DIR__ . "/../vues/notFound.php";  die();
 }
 ?>
