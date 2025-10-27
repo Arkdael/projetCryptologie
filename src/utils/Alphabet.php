@@ -1,5 +1,6 @@
 <?php
 require_once "Tableau.php";
+
 class Alphabet extends Tableau
 {
     public function __construct(array $liste_lettres)

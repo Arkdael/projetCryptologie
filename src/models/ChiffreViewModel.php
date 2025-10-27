@@ -1,5 +1,6 @@
 <?php
 require_once "IChiffreViewModel.php";
+
 class ChiffreViewModel implements IChiffreViewModel
 {
     public string $nom;
