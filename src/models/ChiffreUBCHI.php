@@ -2,6 +2,7 @@
 require_once "IChiffre.php";
 require_once __DIR__ . "/../utils/Alphabet.php";
 require_once __DIR__ . "/../utils/Tableau.php";
+
 class ChiffreUBCHI implements Ichiffre
 {
     public function chiffrer($texte_clair, $clef, $alphabet)

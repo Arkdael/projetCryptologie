@@ -3,12 +3,13 @@ require_once "IChiffre.php";
 require_once __DIR__ . "/../services/service.php";
 require_once __DIR__ . "/../utils/Alphabet.php";
 require_once __DIR__ . "/../utils/Tableau.php";
+
 class ChiffrePolybe implements Ichiffre
 {
     function chiffrer($texte_clair, $clef, $alphabet) // Chaque lettre du texte clair devient les coordonnées de la lettre dans le carre$carre.
     {
         $nouvel_alphabet = $alphabet->creer_variante_alphabet($clef??"", $alphabet);
-        $carre = Tableau::fromText(implode($nouvel_alphabet->obtenir_tableau()), sqrt(count($nouvel_alphabet->obtenir_tableau())), sqrt(count($nouvel_alphabet->obtenir_tableau())));
+        $carre = $this->creer_carre($nouvel_alphabet);
         $texte_chiffre = "";
 
         foreach (str_split(strtoupper($texte_clair)) as $lettre)
@@ -25,7 +26,7 @@ class ChiffrePolybe implements Ichiffre
     function dechiffrer($texte_chiffre, $clef, $alphabet)
     {
         $nouvel_alphabet = $alphabet->creer_variante_alphabet($clef??"", $alphabet);
-        $carre = Tableau::fromText(implode($nouvel_alphabet->obtenir_tableau()), sqrt(count($nouvel_alphabet->obtenir_tableau())), sqrt(count($nouvel_alphabet->obtenir_tableau())));
+        $carre = $this->creer_carre($nouvel_alphabet);
         $texte_chiffre_formate = str_replace(" ", "", $texte_chiffre);
         $texte_clair = "";
 
@@ -37,6 +38,11 @@ class ChiffrePolybe implements Ichiffre
         }
         return $texte_clair;
     }
-}
 
+    private function creer_carre($nouvel_alphabet) : Tableau
+    {
+       $carre = Tableau::fromText(implode($nouvel_alphabet->_tableau), (int)sqrt(count($nouvel_alphabet->_tableau)), (int)sqrt(count($nouvel_alphabet->_tableau)));
+       return $carre;
+    }
+}
 ?>

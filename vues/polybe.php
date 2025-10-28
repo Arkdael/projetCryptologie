@@ -2,7 +2,6 @@
 <html>
   <head>
       <title><?php echo htmlspecialchars($chiffre_courantVM->titre);?></title>
-      <title><?php echo htmlspecialchars($chiffre_courantVM->titre);?></title>
       <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -22,7 +21,7 @@
 
           <div class="formItem">
             <label for="_carre">Carré</label><br>
-            <table name="_carre" tabindex=0> <!-- J'aimerais faire qu'on puisse naviguer le carre avec les fleches mais le skip avec 1 seul tab.-->
+            <table name="_carre" tabindex=0> 
               <!-- Créer le visuel du carré dynamiquement-->
               <tr>
                 <th> </th>
